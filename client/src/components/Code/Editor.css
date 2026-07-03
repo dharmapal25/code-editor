@@ -1,0 +1,76 @@
+.editor__container {
+    display: flex;
+    justify-content: center;
+    /* align-items: center; */
+    width: 100%;
+    background: #666666;
+    height: 92vh;
+    position: fixed;
+    /* padding: 5px; */
+    /* overflow: hidden; */
+
+}
+
+.run__button {
+    padding: 9px 20px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    border: none;
+    border-bottom: 2px solid #6a86b9e8;
+    border-right: 2px solid #6a86b9e8;
+    cursor: pointer;
+}
+
+.input__container {
+    display: flex;
+    flex-direction: column; 
+    width: 100%;
+    height: 100%;
+    background: rgb(19, 11, 11);
+}
+
+
+
+.input__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #3b3b3b;
+    padding: 5px;
+    font-size: 20px;
+    color: #c4c4c4;
+}
+
+
+.output__container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+}
+
+.output__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #3b3b3b;
+    /* padding: 2px; */
+    font-size: 20px;
+    color: #c4c4c4;
+}
+
+.code-section {
+    width: 95%;
+    height: 95%;
+    resize: none;
+    outline: none;
+    border: none;
+    scrollbar-width: thin;
+    padding: 2.5%;
+    font-size: 15px;
+    height: 80vh;
+    background: #b8353500;
+    color: aliceblue;
+
+}

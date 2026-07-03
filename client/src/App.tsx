@@ -1,8 +1,16 @@
+// import FlashCodeEditor from "./components/FlashCodeEditor"
+import Navbar from "./components/Navbar/Navbar"
+import './App.css'
+import Editor from "./components/Code/Editor"
 const App = () => {
   return (
-    <div>
-      <h1>Hello, World!</h1>
-    </div>
+    <>
+
+      {/* <FlashCodeEditor/> */}
+
+    <Navbar/>
+    <Editor/>
+    </>
   )
 }
 
