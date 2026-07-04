@@ -20,8 +20,8 @@ app.get("/", (req, res) => {
 
 // app.use(express.static(path.join(dirname)));
 
-// Python Run API
-app.post("/run", (req, res) => {
+// Js Run API
+app.post("/javascript/online-compiler", (req, res) => {
 
     const code = req.body.code;
     const tempDir = path.join(dirname, "temp");
@@ -45,5 +45,34 @@ app.post("/run", (req, res) => {
     });
 
 });
+
+// Python Run API
+
+app.post("/python/online-compiler", (req, res) => {
+
+    const code = req.body.code;
+    const tempDir = path.join(dirname, "temp");
+    const tempFile = path.join(tempDir, "main.py");
+
+    if (!fs.existsSync(tempDir)) {
+        fs.mkdirSync(tempDir, { recursive: true });
+    }
+
+    fs.writeFileSync(tempFile, code);
+
+    exec(`python3 "${tempFile}"`, (err, stdout, stderr) => {
+        if (err) {
+            return res.json({
+                output: stderr || err.message
+            });
+        }
+        res.json({
+            output: stdout
+        });
+    });
+
+});
+
+
 
 export default app;

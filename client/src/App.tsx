@@ -14,10 +14,9 @@ const App = () => {
   return (
     <>
 
-    {/* <Demo/> */}
-
       <Navbar />
       <Editor />
+
     </>
   )
 }
