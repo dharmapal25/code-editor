@@ -5,55 +5,59 @@ import './Editor.css';
 import api from '../../services/api';
 
 function CodeEditor() {
-    const [outputCode, setoutputCode] = useState("");
-    const editorRef = useRef(null);
-
-    // Jab 'Run' button click hoga
+const [outputCode, setoutputCode] = useState("");
+    
+    const editorRef = useRef<any>(null); 
     const runCode = () => {
         if (!editorRef.current) return;
-
-        // Monaco Editor se current code uthane ka sahi tarika:
-        const currentCode: any = editorRef.current.getValue();
+        
+        const currentCode = editorRef.current.getValue();
         console.log('Sending Code to API:', currentCode);
 
-        // API Call
         api.post("/run", { code: currentCode })
-            .then((response) => {
-                setoutputCode(response.data.output);
-            })
-            .catch((err) => {
-                console.log(err);
-                setoutputCode("Error running code: " + err.message);
-            });
+            .then((response) => setoutputCode(response.data.output))
+            .catch(err => console.log(err));
     };
 
-    function handleEditorDidMount(editor, monaco) {
+    function handleEditorDidMount(editor:any, monaco:any) {
         editorRef.current = editor;
+
+        editor.addAction({
+            id: 'run-code-shortcut',
+            label: 'Run Code',
+            keybindings: [
+                monaco.KeyMod.Shift | monaco.KeyCode.Enter
+            ],
+            run: () => {
+                runCode();
+            }
+        });
     }
 
-    // Output clear karne ke liye refresh button handler
+    // Output clear handler
     const clearOutput = () => {
         setoutputCode("");
     };
 
     return (
         <div className='editor__container'>
+
             {/* INPUT SECTION */}
             <div className="input__container">
                 <div className="input__header">
                     <span className="file_name">main.js</span>
-                    <button className='run__button' onClick={runCode}>
+                    <button className='run__button' onClick={runCode} title='Shift + Enter' >
                         <BiRightArrow /> Run
                     </button>
                 </div>
 
                 <div className="input__body">
                     <Editor
-                        height="80vh" // Aapki layout ke hisab se 80vh ya 100% fit rahega
+                        height="80vh" 
                         defaultLanguage="javascript"
                         defaultValue="// Write your javascript code here..."
                         onMount={handleEditorDidMount}
-                        theme='vs-dark' // Corrected theme name
+                        theme='vs-dark' 
                         options={{
                             fontSize: 14,
                             minimap: { enabled: false },
@@ -76,8 +80,8 @@ function CodeEditor() {
                     <textarea 
                         className='output__textarea code-section' 
                         value={outputCode} 
-                        readOnly // Output box ko readOnly banaya taaki user edit na kar sake
-                        placeholder="Click Run to see the output here..."
+                        readOnly 
+                        placeholder="Click Run or press Shift+Enter to see the output here..."
                     />
                 </div>
             </div>
@@ -85,5 +89,4 @@ function CodeEditor() {
     );
 }
 
-// Corrected Export Statement
 export default CodeEditor;

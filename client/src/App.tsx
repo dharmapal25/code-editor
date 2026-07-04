@@ -3,7 +3,6 @@ import './App.css'
 import Editor from "./components/Code/CodeEditor"
 import { useEffect } from "react"
 import api from "./services/api"
-import { Demo } from "./components/Demo"
 const App = () => {
 
   useEffect(() => {
