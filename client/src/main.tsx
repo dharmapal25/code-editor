@@ -1,8 +1,8 @@
 import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import JavascriptCompiler from './pages/JavascriptCompiler.tsx'
-import PythonCompiler from './pages/PythonCompiler.tsx'
+import JavascriptCompiler from './pages/JSEditor.tsx'
+import PythonCompiler from './pages/PythonEditor.tsx'
 
 
 const Routes = createBrowserRouter([

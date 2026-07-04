@@ -47,7 +47,6 @@ app.post("/javascript/online-compiler", (req, res) => {
 });
 
 // Python Run API
-
 app.post("/python/online-compiler", (req, res) => {
 
     const code = req.body.code;
