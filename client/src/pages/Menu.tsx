@@ -4,7 +4,7 @@ import { DiJavascript, DiPython } from 'react-icons/di';
 import { SlArrowDown, SlArrowUp } from 'react-icons/sl';
 import { Link } from 'react-router-dom';
 
-function Menu({ Toggle :  }) {
+function Menu({ Toggle }) {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [isMenu, setIsMenu] = useState<boolean>(false);
 
