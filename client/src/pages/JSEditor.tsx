@@ -1,5 +1,5 @@
 import React from 'react'
-import Compiler from '../Routes/Compiler'
+import CompilersRoute from '../Routes/Compilers.Route'
 import CodeEditor from '../components/Code/CodeEditor'
 
 function JSEditor() {
@@ -12,7 +12,7 @@ function JSEditor() {
   return (
     <div>
         <h1>JavaScript Compiler</h1>
-        <Compiler/>
+        <CompilersRoute/>
         <CodeEditor info={info} />
     </div>
   )

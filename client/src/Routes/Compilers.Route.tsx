@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-function Navbar() {
+function CompilersRoute() {
 
     const navigate = useNavigate();
 
@@ -19,4 +19,4 @@ function Navbar() {
     );
 }
 
-export default Navbar;
+export default CompilersRoute;

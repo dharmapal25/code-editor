@@ -6,8 +6,10 @@ import { javascriptCompiler } from '../../services/Languages/Javascript';
 import { MdDelete } from 'react-icons/md';
 import { pythonCompiler } from '../../services/Languages/Python';
 
-// function CodeEditor({ info }: { info: { language: string; fileName: string } }) {
 function CodeEditor({ info, pythonInfo }: { info?: { language: string; fileName: string }; pythonInfo?: { language: string; fileName: string } }) {
+
+    console.log(info, pythonInfo);
+
     const [outputCode, setoutputCode] = useState("");
 
     const editorRef = useRef<any>(null);
@@ -18,15 +20,26 @@ function CodeEditor({ info, pythonInfo }: { info?: { language: string; fileName:
         const currentCode = editorRef.current.getValue();
         console.log('Sending Code to API:', currentCode);
 
-        // Javascript Compiler
-        javascriptCompiler(currentCode)
-            .then((response: any) => setoutputCode(response.data.output))
-            .catch((error) => console.error("Error occurred while compiling JavaScript code:", error));
 
-        // Python Compiler
-        pythonCompiler(currentCode)
-            .then((response: any) => setoutputCode(response.data.output))
-            .catch((error) => console.error("Error occurred while compiling Python code:", error));
+        if(info?.language) {
+            // Javascript Compiler
+            javascriptCompiler(currentCode)
+                .then((response: any) => setoutputCode(response.data.output))
+                .catch((error) => console.error("Error occurred while compiling JavaScript code:", error));
+        }
+        else if(pythonInfo?.language) {
+
+            // Python Compiler
+            pythonCompiler(currentCode)
+                .then((response: any) => setoutputCode(response.data.output))
+                .catch((error) => console.error("Error occurred while compiling Python code:", error));
+        }
+
+        else {
+            alert("ERROR")
+        }
+
+
     };
 
     function handleEditorDidMount(editor: any, monaco: any) {

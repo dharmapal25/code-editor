@@ -1,5 +1,5 @@
 import React from 'react'
-import Compiler from '../Routes/Compiler'
+import Compiler from '../Routes/Compilers.Route'
 import CodeEditor from '../components/Code/CodeEditor'
 
 function PythonEditor() {

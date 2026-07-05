@@ -2,6 +2,7 @@ import api from "../api";
 
 export const javascriptCompiler = async (code: string) => {
     try {
+        console.log("===== JS API =====");
 
         if (!code) {
             throw new Error("Code is empty");
