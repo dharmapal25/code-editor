@@ -34,11 +34,11 @@ app.post("/api/javascript/online-compiler", (req, res) => {
 
     fs.writeFileSync(tempFile, code);
 
-    exec(`node "${tempFile}"`, (err, stdout, stderr) => {
+    exec(`node "${tempFile}"`, { timeout: 10000 }, (err, stdout, stderr) => {
 
         if (err) {
             return res.json({
-                output: stderr || err.message
+                output: stderr || err.message || "Execution failed"
             });
         }
 
@@ -57,6 +57,7 @@ app.post("/api/python/online-compiler", (req, res) => {
 
     const tempDir = path.join(dirname, "temp", "python");
     const tempFile = path.join(tempDir, "main.py");
+    const pythonCommand = process.platform === "win32" ? "python" : "python3";
 
     if (!fs.existsSync(tempDir)) {
         fs.mkdirSync(tempDir, { recursive: true });
@@ -64,11 +65,11 @@ app.post("/api/python/online-compiler", (req, res) => {
 
     fs.writeFileSync(tempFile, code);
 
-    exec(`python3 "${tempFile}"`, (err, stdout, stderr) => {
+    exec(`${pythonCommand} "${tempFile}"`, { timeout: 10000 }, (err, stdout, stderr) => {
 
         if (err) {
             return res.json({
-                output: stderr || err.message
+                output: stderr || err.message || "Execution failed"
             });
         }
 

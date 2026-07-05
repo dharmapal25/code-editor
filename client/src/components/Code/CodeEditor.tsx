@@ -1,18 +1,19 @@
 import { useState, useRef } from 'react';
 import Editor from '@monaco-editor/react';
-import { BiFullscreen, BiMenu, BiRightArrow } from 'react-icons/bi';
 import { VscDownload } from 'react-icons/vsc'; 
-import './Editor.css';
-import { javascriptCompiler } from '../../services/Languages/Javascript';
 import { MdDelete } from 'react-icons/md';
+import { BiFullscreen, BiMenu, BiRightArrow } from 'react-icons/bi';
+import { javascriptCompiler } from '../../services/Languages/Javascript';
 import { pythonCompiler } from '../../services/Languages/Python';
 import Menu from '../../pages/Menu';
+import './Editor.css';
 
 function CodeEditor({ info, pythonInfo }: { info?: { language: string; fileName: string }; pythonInfo?: { language: string; fileName: string } }) {
 
     console.log(info, pythonInfo);
 
     const [outputCode, setoutputCode] = useState("");
+    const [isRunning, setIsRunning] = useState(false);
     const [menuOpen, setMenuOpen] = useState<boolean>(false);
     const editorRef = useRef<any>(null);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -38,22 +39,36 @@ function CodeEditor({ info, pythonInfo }: { info?: { language: string; fileName:
         setMenuOpen(!menuOpen)
     }
 
-    const runCode = () => {
+    const runCode = async () => {
         if (!editorRef.current) return;
 
         const currentCode = editorRef.current.getValue();
-        if (info?.language) {
-            javascriptCompiler(currentCode)
-                .then((response: any) => setoutputCode(response.data.output))
-                .catch((error) => console.error("Error occurred code:", error));
+
+        if (!currentCode.trim()) {
+            setoutputCode("Please write some code before running.");
+            return;
         }
-        else if (pythonInfo?.language) {
-            pythonCompiler(currentCode)
-                .then((response: any) => setoutputCode(response.data.output))
-                .catch((error) => console.error("Error occurred code:", error));
-        }
-        else {
-            alert("ERROR")
+
+        setIsRunning(true);
+        setoutputCode("Running...");
+
+        try {
+            if (info?.language) {
+                const response = await javascriptCompiler(currentCode);
+                setoutputCode(response?.output ?? "No output");
+            }
+            else if (pythonInfo?.language) {
+                const response = await pythonCompiler(currentCode);
+                setoutputCode(response?.output ?? "No output");
+            }
+            else {
+                setoutputCode("Please select a language first.");
+            }
+        } catch (error) {
+            console.error("Error occurred code:", error);
+            setoutputCode("Something went wrong while running the code.");
+        } finally {
+            setIsRunning(false);
         }
     };
 
@@ -135,8 +150,8 @@ function CodeEditor({ info, pythonInfo }: { info?: { language: string; fileName:
                         />
 
                         <BiFullscreen onClick={FullScreen} style={{ fontSize: "27px", padding: "5px", cursor: "pointer" }} />
-                        <button className='run__button' onClick={runCode} title='Shift + Enter' >
-                            <BiRightArrow /> Run
+                        <button className='run__button' onClick={runCode} title='Shift + Enter' disabled={isRunning} >
+                            <BiRightArrow /> {isRunning ? 'Running...' : 'Run'}
                         </button>
                     </div>
                 </div>
@@ -172,7 +187,7 @@ function CodeEditor({ info, pythonInfo }: { info?: { language: string; fileName:
                         className='output__textarea code-section'
                         value={outputCode}
                         readOnly
-                        placeholder="Click Run or press Shift+Enter to see the output here..."
+                        placeholder={isRunning ? "Running..." : "Click Run or press Shift+Enter to see the output here..."}
                     />
                 </div>
             </div>

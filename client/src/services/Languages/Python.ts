@@ -8,10 +8,11 @@ export const pythonCompiler = async (code: string) => {
             throw new Error("Code is empty");
         }
 
-        const response = await api.post("/python/online-compiler", { code });
-        return response;
+        const response = await api.post("/api/python/online-compiler", { code });
+        return response.data;
     } catch (error) {
         console.error("Error in pythonCompiler:", error);
+        throw error;
     }
 };
 
