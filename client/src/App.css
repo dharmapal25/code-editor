@@ -3,3 +3,147 @@
     padding: 0;
     
 }
+
+/* Base Wrapper & Container */
+.menu__wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translateX(-600px);
+    width: 280px;
+    height: 100vh;
+    background-color: #1e1e24;
+    z-index: 111;
+    color: #ffffff;
+    transition: 1s;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.menu__container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+/* Navbar / Header */
+.menu__navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #2d2d35;
+}
+
+
+.menu__logo {
+    font-weight: bold;
+    font-size: 1.1rem;
+    line-height: 1.2;
+    color: #00adb5; /* Theme Color */
+}
+
+.menu__close-btn {
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.close__menu {
+    /* display: none; */
+    transform: translateX(0px);
+    transition: 1s;
+}
+
+.menu__close-btn:hover {
+    color: #ff4a4a;
+}
+
+/* Body & Links */
+.menu__body {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    gap: 10px;
+}
+
+.menu__link {
+    color: #eeeeee;
+    text-decoration: none;
+    padding: 12px 15px;
+    border-radius: 6px;
+    transition: background 0.2s;
+    font-size: 1rem;
+}
+
+.menu__link:hover {
+    background-color: #2d2d35;
+    color: #00adb5;
+}
+
+/* Dropdown Styles */
+.menu__dropdown-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.menu__dropdown-trigger {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #eeeeee;
+    padding: 12px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s;
+    user-select: none;
+}
+
+.menu__dropdown-trigger:hover {
+    background-color: #2d2d35;
+    color: #00adb5;
+}
+
+.arrow-icon {
+    font-size: 0.85rem;
+}
+
+/* Dropdown Content */
+.menu__dropdown-content {
+    display: flex;
+    flex-direction: column;
+    background-color: #16161a;
+    margin-top: 5px;
+    border-radius: 6px;
+    overflow: hidden;
+    padding: 5px 0;
+}
+
+.menu__dropdown-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #b5b5b5;
+    text-decoration: none;
+    padding: 10px 25px; 
+    font-size: 0.95rem;
+    transition: all 0.2s;
+}
+
+.menu__dropdown-link:hover {
+    background-color: #25252b;
+    color: #ffffff;
+}
+
+/* Language Specific Icons styling */
+.lang-icon {
+    font-size: 1.2rem;
+}
+
+.python {
+    color: #3776ab;
+}
+
+.js {
+    color: #f7df1e;
+}

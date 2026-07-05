@@ -11,8 +11,8 @@ function JSEditor() {
 
   return (
     <div>
-        <h1>JavaScript Compiler</h1>
-        <CompilersRoute/>
+        {/* <h1>JavaScript Compiler</h1> */}
+        {/* <CompilersRoute/> */}
         <CodeEditor info={info} />
     </div>
   )
