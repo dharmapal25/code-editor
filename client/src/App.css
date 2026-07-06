@@ -164,7 +164,7 @@
     color: #b5b5b5;
     text-decoration: none;
     padding: 11px 26px;
-    font-size: 0.95rem;
+    font-size: 1.1rem;
     transition: all 0.2s ease;
 }
 
@@ -176,7 +176,7 @@
 
 /* Language Specific Icons styling */
 .lang-icon {
-    font-size: 1.25rem;
+    font-size: 1.65rem;
 }
 
 .python {

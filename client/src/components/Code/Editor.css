@@ -41,7 +41,7 @@
 }
 
 .file_name {
-    margin: 0 20px;
+    margin: 0 12px;
     flex: 1;
     text-align: center;
     font-weight: 500;
@@ -150,7 +150,6 @@
 .output__body {
     flex: 1;
     overflow: hidden;
-    padding: 10px;
 }
 
 .code-section {
@@ -219,10 +218,6 @@
         padding: 8px 10px;
     }
 
-    /* .header__tools {
-        justify-content: center !important;
-        background: #000;
-    } */
 
 
     .file_name {
@@ -239,19 +234,17 @@
         gap: 10px;
     }
 
-        .tools svg {
-        font-size: 22px !important;
-        padding: 4px !important;
+    .tools svg {
+        font-size: 20px !important;
+        padding: 2px !important;
     }
 
     .run__button {
-        padding: 7px 14px;
-        /* font-size: 12px; */
-        margin-left: auto;
+        padding: 7px 12px;
     }
 
     .output__open {
-        transform: translateY(500px);
+        transform: translateY(700px);
         transition: 1s;
     }
 
@@ -288,7 +281,7 @@
 
     .output__container {
         position: absolute;
-        top:20%;
+        top: 20%;
     }
 }
 
@@ -301,14 +294,19 @@
 
     /* icons carry inline font-size from TSX, override for small screens */
     .tools svg {
-        font-size: 22px !important;
-        padding: 4px !important;
+        font-size: 20px !important;
+        /* padding: 4px !important; */
     }
 
     .run__button {
+        padding: 5px 10px;
+        font-size: 12px;
+        gap: 1px;
+    }
+
+    .output__close {
         padding: 6px 12px;
-        font-size: 11px;
-        gap: 4px;
+
     }
 
     .code-section {
@@ -316,7 +314,5 @@
         padding: 10px;
     }
 
-    .output__body {
-        padding: 6px;
-    }
+
 }

@@ -34,8 +34,7 @@ function Menu({ Toggle }: MenuProps) {
                 </div>
 
                 <div className="menu__body">
-                    <Link to={'/setting'} className="menu__link">Setting</Link>
-
+                   
                     {/* Dropdown Container */}
                     <div className="menu__dropdown-container">
                         <div className="menu__dropdown-trigger" onClick={toggleDropdown}>
@@ -54,6 +53,8 @@ function Menu({ Toggle }: MenuProps) {
                             </div>
                         )}
                     </div>
+
+                     <Link to={'/setting'} className="menu__link">Setting</Link>
 
                     <Link to={'/login'} className="menu__link">Login</Link>
                 </div>

@@ -11,8 +11,6 @@ import { CgClose } from 'react-icons/cg';
 
 function CodeEditor({ info, pythonInfo }: { info?: { language: string; fileName: string }; pythonInfo?: { language: string; fileName: string } }) {
 
-    console.log(info, pythonInfo);
-
     const [outputCode, setoutputCode] = useState("");
     const [isRunning, setIsRunning] = useState(false);
     const [menuOpen, setMenuOpen] = useState<boolean>(false);
@@ -27,7 +25,6 @@ function CodeEditor({ info, pythonInfo }: { info?: { language: string; fileName:
 
     function IsOutputOpen() {
         setIsOutput(!IsOutput)
-        console.log(IsOutput, "<<< ")
     }
 
     const getInitialCode = () => {
@@ -63,7 +60,7 @@ function CodeEditor({ info, pythonInfo }: { info?: { language: string; fileName:
 
         try {
 
-IsOutputOpen()
+            IsOutputOpen()
 
             if (info?.language) {
                 const response = await javascriptCompiler(currentCode);
@@ -156,7 +153,7 @@ IsOutputOpen()
 
                     <div className="menu__side">
 
-                        <BiMenu style={{ fontSize: "32px", padding: "5px", cursor: "pointer" }} onClick={menuToggle} />
+                        <BiMenu className='menuu' style={{ fontSize: "31px", cursor: "pointer" }} onClick={menuToggle} />
                         <Menu Toggle={menuInfo} />
                         <span className="file_name">{info?.fileName || pythonInfo?.fileName}</span>
 
