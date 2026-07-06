@@ -1,12 +1,13 @@
 import { useState, useRef } from 'react';
 import Editor from '@monaco-editor/react';
-import { VscDownload } from 'react-icons/vsc'; 
+import { VscDownload } from 'react-icons/vsc';
 import { MdDelete } from 'react-icons/md';
 import { BiFullscreen, BiMenu, BiRightArrow } from 'react-icons/bi';
 import { javascriptCompiler } from '../../services/Languages/Javascript';
 import { pythonCompiler } from '../../services/Languages/Python';
 import Menu from '../../pages/Menu';
 import './Editor.css';
+import { CgClose } from 'react-icons/cg';
 
 function CodeEditor({ info, pythonInfo }: { info?: { language: string; fileName: string }; pythonInfo?: { language: string; fileName: string } }) {
 
@@ -15,12 +16,19 @@ function CodeEditor({ info, pythonInfo }: { info?: { language: string; fileName:
     const [outputCode, setoutputCode] = useState("");
     const [isRunning, setIsRunning] = useState(false);
     const [menuOpen, setMenuOpen] = useState<boolean>(false);
+    const [IsOutput, setIsOutput] = useState<boolean>(false);
     const editorRef = useRef<any>(null);
     const containerRef = useRef<HTMLDivElement>(null);
 
     const activeLanguage = info?.language || pythonInfo?.language || "javascript";
     const storageKey = `code_editor_${activeLanguage}`;
     const defaultCode = `// Write your ${activeLanguage} code here...`;
+
+
+    function IsOutputOpen() {
+        setIsOutput(!IsOutput)
+        console.log(IsOutput, "<<< ")
+    }
 
     const getInitialCode = () => {
         const savedData = localStorage.getItem(storageKey);
@@ -52,7 +60,11 @@ function CodeEditor({ info, pythonInfo }: { info?: { language: string; fileName:
         setIsRunning(true);
         setoutputCode("Running...");
 
+
         try {
+
+IsOutputOpen()
+
             if (info?.language) {
                 const response = await javascriptCompiler(currentCode);
                 setoutputCode(response?.output ?? "No output");
@@ -69,6 +81,7 @@ function CodeEditor({ info, pythonInfo }: { info?: { language: string; fileName:
             setoutputCode("Something went wrong while running the code.");
         } finally {
             setIsRunning(false);
+
         }
     };
 
@@ -129,7 +142,10 @@ function CodeEditor({ info, pythonInfo }: { info?: { language: string; fileName:
         document.body.removeChild(element);
     };
 
+
     let menuInfo = { menu: menuOpen }
+
+
 
     return (
         <div className='editor__container' ref={containerRef}>
@@ -137,28 +153,35 @@ function CodeEditor({ info, pythonInfo }: { info?: { language: string; fileName:
             {/* INPUT SECTION */}
             <div className="input__container">
                 <div className="input__header">
-                    <BiMenu style={{ fontSize: "30px", padding: "5px", cursor: "pointer" }} onClick={menuToggle} />
-                    <Menu Toggle={menuInfo} />
-                    <span className="file_name">{info?.fileName || pythonInfo?.fileName}</span>
 
-                    <div className="tools">
-                        
-                        <VscDownload 
-                            style={{ fontSize: "28px", padding: "5px", cursor: "pointer" }} 
-                            onClick={downloadFile} 
+                    <div className="menu__side">
+
+                        <BiMenu style={{ fontSize: "32px", padding: "5px", cursor: "pointer" }} onClick={menuToggle} />
+                        <Menu Toggle={menuInfo} />
+                        <span className="file_name">{info?.fileName || pythonInfo?.fileName}</span>
+
+                    </div>
+
+                    <div className="header__tools tools">
+
+                        <VscDownload
+                            style={{ fontSize: "28px", padding: "5px", cursor: "pointer" }}
+                            onClick={downloadFile}
                             title="Download Code File"
                         />
 
                         <BiFullscreen onClick={FullScreen} style={{ fontSize: "27px", padding: "5px", cursor: "pointer" }} />
-                        <button className='run__button' onClick={runCode} title='Shift + Enter' disabled={isRunning} >
-                            <BiRightArrow /> {isRunning ? 'Running...' : 'Run'}
+                        <span className='output__close' onClick={IsOutputOpen} >Output</span >
+
+                        <button className='run__button' onClick={runCode || IsOutputOpen} title='Shift + Enter' disabled={isRunning} >
+                            <BiRightArrow /> Run
                         </button>
                     </div>
                 </div>
 
                 <div className="input__body">
                     <Editor
-                        height="80vh"
+                        height="100vh"
                         defaultLanguage={activeLanguage}
                         defaultValue={getInitialCode()}
                         onChange={handleEditorChange}
@@ -174,12 +197,19 @@ function CodeEditor({ info, pythonInfo }: { info?: { language: string; fileName:
             </div>
 
             {/* OUTPUT SECTION */}
-            <div className="output__container">
+            <div className={`output__container ${(IsOutput) ? "output__open" : ""} `}>
                 <div className="output__header">
                     <span className="headline">Output</span>
-                    <button className='run__button' onClick={clearOutput}>
-                        <MdDelete fontSize={20} />
-                    </button>
+
+
+                    <div className="tools">
+                        <button className='run__button' onClick={clearOutput}>
+                            <MdDelete fontSize={18} title='Clear output' />
+
+                        </button>
+                        <CgClose className='output__close' style={{ fontSize: "28px", cursor: "pointer" }} onClick={IsOutputOpen} />
+
+                    </div>
                 </div>
 
                 <div className="output__body">

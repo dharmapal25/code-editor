@@ -1,28 +1,114 @@
 .nav__container {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
-    background-color: #9c9c9c;
-    /* padding: 5px; */
+    background: linear-gradient(180deg, #242424, #1b1a1a);
+    padding: 0 24px;
     height: 8vh;
+    min-height: 52px;
+    box-shadow: 0 2px 10px #00000059;
+    border-bottom: 1px solid #2d2d2d;
+}
 
+.logo h1 {
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: #04AA6D;
+    letter-spacing: 0.3px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .menu__items {
     display: flex;
-    justify-content: space-around;
-    width: 20%;
-    list-style-type: none;
+    justify-content: flex-end;
     align-items: center;
-    font-size: 20px;
+    gap: 16px;
+    width: auto;
+    list-style-type: none;
+    font-size: 16px;
+}
+
+.menu__items li {
+    color: #d4d4d4;
+    cursor: pointer;
+    padding: 8px 14px;
+    border-radius: 8px;
+    transition: background 0.2s, color 0.2s;
+}
+
+.menu__items li:hover {
+    background-color: #2d2d2d;
+    color: #00adb5;
 }
 
 .menu__items button {
-    background-color: #4e4e4e9c;
+    /* background: linear-gradient(135deg, #00adb5, #00838a); */
+    background: linear-gradient(135deg, #1e6b4f, #059862);
     border: none;
     color: white;
-    font-size: 15px;
-    padding: 7px 14px;
-    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 9px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
+.menu__items button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(0, 173, 181, 0.4);
+}
+
+.menu__items button:active {
+    transform: translateY(0);
+}
+
+/* ---------- Tablet ---------- */
+@media (max-width: 768px) {
+    .nav__container {
+        padding: 0 14px;
+        height: 7vh;
+        min-height: 48px;
+    }
+
+    .logo h1 {
+        font-size: 1.05rem;
+        color: #04AA6D;
+    }
+
+    .menu__items {
+        gap: 8px;
+        font-size: 14px;
+    }
+
+    .menu__items li {
+        padding: 6px 10px;
+        font-size: 13px;
+    }
+
+    .menu__items button {
+        padding: 7px 14px;
+        font-size: 13px;
+    }
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 480px) {
+    .nav__container {
+        padding: 0 10px;
+    }
+
+    .logo h1 {
+        font-size: 0.9rem;
+    }
+
+    /* Keep Login visible, hide the plain text item to avoid clutter on very small screens */
+    .menu__items li {
+        display: none;
+    }
+
+    .menu__items button {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+}
