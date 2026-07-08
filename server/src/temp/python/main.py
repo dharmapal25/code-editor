@@ -1,2 +1,1 @@
-
-print("c")
+// Write your python code here...
