@@ -1,2 +1,2 @@
 // Write your javascript code here...
-console.log("heelo")
+console.log("hello!")

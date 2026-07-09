@@ -1,11 +1,11 @@
 import CodeEditor from '../components/Code/CodeEditor'
 import Navbar from '../components/Navbar/Navbar'
 
-function PythonEditor() {
+function HTMLEditor() {
 
   const info = {
-    language: "python",
-    fileName: "main.py",
+    language: "html",
+    fileName: "index.html",
   }
 
   return (
@@ -16,4 +16,4 @@ function PythonEditor() {
   )
 }
 
-export default PythonEditor
+export default HTMLEditor

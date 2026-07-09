@@ -1,17 +1,17 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
 
-import App from "./App";
 import JavascriptCompiler from "./pages/JSEditor";
 import PythonCompiler from "./pages/PythonEditor";
-import Login from "./pages/Login";
+import JavaCompiler from "./pages/JavaEditor";
+import HTMLCompiler from "./pages/HTMLEditor";
 import { createRoot } from "react-dom/client";
-import { authUserInfo } from "./context/AuthContext";
+import Settings from "./pages/Settings";
 
 const Routes = createBrowserRouter([
   {
+    // BUG FIX / FEATURE: root URL hit karne par ab seedha /python pe redirect
     path: "/",
-    element: <App />
-
+    element: <Navigate to="/python" replace />,
   },
   {
     path: "/javascript",
@@ -20,11 +20,18 @@ const Routes = createBrowserRouter([
   {
     path: "/python",
     element: <PythonCompiler />
-
   },
   {
-    path: "/login",
-    element: <Login />,
+    path: "/java",
+    element: <JavaCompiler />
+  },
+  {
+    path: "/html",
+    element: <HTMLCompiler />
+  },
+  {
+    path: "/setting",
+    element: <Settings />
   },
   {
     path: "*",
@@ -34,7 +41,5 @@ const Routes = createBrowserRouter([
 
 
 createRoot(document.getElementById('root')!).render(
-
-
   <RouterProvider router={Routes} />
-); 
+);

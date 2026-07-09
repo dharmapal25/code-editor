@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { CgClose } from 'react-icons/cg';
-import { DiJavascript, DiPython } from 'react-icons/di';
+import { DiJavascript, DiPython, DiJava, DiHtml5 } from 'react-icons/di';
 import { SlArrowDown, SlArrowUp } from 'react-icons/sl';
 import { Link } from 'react-router-dom';
-
+import "../App.css";
 type MenuProps = {
   Toggle: {
     menu: boolean;
@@ -14,15 +14,12 @@ function Menu({ Toggle }: MenuProps) {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [isMenu, setIsMenu] = useState<boolean>(true);
 
-    console.log(Toggle.menu)
-
     useEffect(() => {
         setIsMenu(true)
     }, [Toggle.menu])
-    
+
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
-        // setIsMenu(Toggle.menu)
     };
 
     return (
@@ -34,7 +31,7 @@ function Menu({ Toggle }: MenuProps) {
                 </div>
 
                 <div className="menu__body">
-                   
+
                     {/* Dropdown Container */}
                     <div className="menu__dropdown-container">
                         <div className="menu__dropdown-trigger" onClick={toggleDropdown}>
@@ -50,13 +47,17 @@ function Menu({ Toggle }: MenuProps) {
                                 <Link to={'/javascript'} className="menu__dropdown-link">
                                     <DiJavascript className="lang-icon js" /> Javascript
                                 </Link>
+                                <Link to={'/java'} className="menu__dropdown-link">
+                                    <DiJava className="lang-icon java" /> Java
+                                </Link>
+                                <Link to={'/html'} className="menu__dropdown-link">
+                                    <DiHtml5 className="lang-icon html" /> HTML
+                                </Link>
                             </div>
                         )}
                     </div>
 
                      <Link to={'/setting'} className="menu__link">Setting</Link>
-
-                    <Link to={'/login'} className="menu__link">Login</Link>
                 </div>
             </div>
         </div>

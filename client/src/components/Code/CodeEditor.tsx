@@ -5,23 +5,78 @@ import { MdDelete } from 'react-icons/md';
 import { BiFullscreen, BiMenu, BiRightArrow } from 'react-icons/bi';
 import { javascriptCompiler } from '../../services/Languages/Javascript';
 import { pythonCompiler } from '../../services/Languages/Python';
+import { javaCompiler } from '../../services/Languages/Java';
 import Menu from '../../pages/Menu';
 import './Editor.css';
 import { CgClose } from 'react-icons/cg';
+import { EDITOR_SETTINGS_KEY, type EditorSettings } from '../../pages/Settings';
 
-function CodeEditor({ info, pythonInfo }: { info?: { language: string; fileName: string }; pythonInfo?: { language: string; fileName: string } }) {
+interface Info {
+    language: string;
+    fileName: string;
+}
+
+const DEFAULT_TEMPLATES: Record<string, string> = {
+    javascript: `// Write your javascript code here...`,
+    python: `# Write your python code here...`,
+    java: `public class Main {
+    public static void main(String[] args) {
+        System.out.println("Hello, World!");
+    }
+}`,
+    html: `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+    <style>
+        /* Internal CSS */
+        body {
+            font-family: sans-serif;
+            background: #111;
+            color: #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hello, World!</h1>
+
+    <script>
+        // Internal JS
+        console.log("Hello from script tag");
+    </script>
+</body>
+</html>`,
+};
+
+function CodeEditor({ info }: { info: Info }) {
 
     const [outputCode, setoutputCode] = useState("");
+    const [htmlPreview, setHtmlPreview] = useState("");
     const [isRunning, setIsRunning] = useState(false);
     const [menuOpen, setMenuOpen] = useState<boolean>(false);
     const [IsOutput, setIsOutput] = useState<boolean>(false);
     const editorRef = useRef<any>(null);
     const containerRef = useRef<HTMLDivElement>(null);
+    const [editorSettings] = useState<EditorSettings>(() => {
+    try {
+        const raw = localStorage.getItem(EDITOR_SETTINGS_KEY);
+        if (raw) return JSON.parse(raw);
+    } catch {}
+    return { fontSize: 14, fontFamily: 'Consolas, monospace' };
+});
 
-    const activeLanguage = info?.language || pythonInfo?.language || "javascript";
+
+
+    const activeLanguage = info.language;
+    const isHtml = activeLanguage === "html";
     const storageKey = `code_editor_${activeLanguage}`;
-    const defaultCode = `// Write your ${activeLanguage} code here...`;
-
+    const defaultCode = DEFAULT_TEMPLATES[activeLanguage] || `// Write your ${activeLanguage} code here...`;
 
     function IsOutputOpen() {
         setIsOutput(!IsOutput)
@@ -54,31 +109,39 @@ function CodeEditor({ info, pythonInfo }: { info?: { language: string; fileName:
             return;
         }
 
+        // HTML: no server needed
+        if (isHtml) {
+            setHtmlPreview(currentCode);
+            IsOutputOpen();
+            return;
+        }
+
         setIsRunning(true);
         setoutputCode("Running...");
 
-
         try {
-
             IsOutputOpen()
 
-            if (info?.language) {
+            if (activeLanguage === "javascript") {
                 const response = await javascriptCompiler(currentCode);
                 setoutputCode(response?.output ?? "No output");
-            }
-            else if (pythonInfo?.language) {
+
+            } else if (activeLanguage === "python") {
                 const response = await pythonCompiler(currentCode);
                 setoutputCode(response?.output ?? "No output");
-            }
-            else {
-                setoutputCode("Please select a language first.");
+
+            } else if (activeLanguage === "java") {
+                const response = await javaCompiler(currentCode);
+                setoutputCode(response?.output ?? "No output");
+
+            } else {
+                setoutputCode("Unsupported language.");
             }
         } catch (error) {
             console.error("Error occurred code:", error);
             setoutputCode("Something went wrong while running the code.");
         } finally {
             setIsRunning(false);
-
         }
     };
 
@@ -101,6 +164,7 @@ function CodeEditor({ info, pythonInfo }: { info?: { language: string; fileName:
 
     const clearOutput = () => {
         setoutputCode("");
+        setHtmlPreview("");
     };
 
     const FullScreen = () => {
@@ -114,18 +178,19 @@ function CodeEditor({ info, pythonInfo }: { info?: { language: string; fileName:
         }
     };
 
+    const EXTENSIONS: Record<string, string> = {
+        javascript: ".js",
+        python: ".py",
+        java: ".java",
+        html: ".html",
+    };
+
     const downloadFile = () => {
         if (!editorRef.current) return;
 
         const currentCode = editorRef.current.getValue();
-        const baseFileName = info?.fileName || pythonInfo?.fileName || "code";
-        let extension = ".txt";
-
-        if (activeLanguage.toLowerCase() === "javascript" || activeLanguage.toLowerCase() === "js") {
-            extension = ".js";
-        } else if (activeLanguage.toLowerCase() === "python" || activeLanguage.toLowerCase() === "py") {
-            extension = ".py";
-        }
+        const baseFileName = info.fileName || "code";
+        const extension = EXTENSIONS[activeLanguage] || ".txt";
 
         const fullFileName = baseFileName.endsWith(extension) ? baseFileName : `${baseFileName}${extension}`;
         const blob = new Blob([currentCode], { type: "text/plain;charset=utf-8" });
@@ -155,7 +220,7 @@ function CodeEditor({ info, pythonInfo }: { info?: { language: string; fileName:
 
                         <BiMenu className='menuu' style={{ fontSize: "31px", cursor: "pointer" }} onClick={menuToggle} />
                         <Menu Toggle={menuInfo} />
-                        <span className="file_name">{info?.fileName || pythonInfo?.fileName}</span>
+                        <span className="file_name">{info.fileName}</span>
 
                     </div>
 
@@ -168,9 +233,9 @@ function CodeEditor({ info, pythonInfo }: { info?: { language: string; fileName:
                         />
 
                         <BiFullscreen onClick={FullScreen} style={{ fontSize: "27px", padding: "5px", cursor: "pointer" }} />
-                        <span className='output__close' onClick={IsOutputOpen} >Output</span >
+                        <span className='output__close' onClick={IsOutputOpen} >{isHtml ? "Preview" : "Output"}</span >
 
-                        <button className='run__button' onClick={runCode || IsOutputOpen} title='Shift + Enter' disabled={isRunning} >
+                        <button className='run__button' onClick={runCode} title='Shift + Enter' disabled={isRunning} >
                             <BiRightArrow /> Run
                         </button>
                     </div>
@@ -184,11 +249,7 @@ function CodeEditor({ info, pythonInfo }: { info?: { language: string; fileName:
                         onChange={handleEditorChange}
                         onMount={handleEditorDidMount}
                         theme='vs-dark'
-                        options={{
-                            fontSize: 14,
-                            minimap: { enabled: false },
-                            automaticLayout: true,
-                        }}
+                        options={{ fontSize: editorSettings.fontSize, fontFamily: editorSettings.fontFamily, minimap: { enabled: false }, automaticLayout: true }}
                     />
                 </div>
             </div>
@@ -196,26 +257,33 @@ function CodeEditor({ info, pythonInfo }: { info?: { language: string; fileName:
             {/* OUTPUT SECTION */}
             <div className={`output__container ${(IsOutput) ? "output__open" : ""} `}>
                 <div className="output__header">
-                    <span className="headline">Output</span>
-
+                    <span className="headline">{isHtml ? "Preview" : "Output"}</span>
 
                     <div className="tools">
                         <button className='run__button' onClick={clearOutput}>
                             <MdDelete fontSize={18} title='Clear output' />
-
                         </button>
                         <CgClose className='output__close' style={{ fontSize: "28px", cursor: "pointer" }} onClick={IsOutputOpen} />
-
                     </div>
                 </div>
 
                 <div className="output__body">
-                    <textarea
-                        className='output__textarea code-section'
-                        value={outputCode}
-                        readOnly
-                        placeholder={isRunning ? "Running..." : "Click Run or press Shift+Enter to see the output here..."}
-                    />
+                    {isHtml ? (
+                        <iframe
+                            className="output__preview"
+                            title="html-preview"
+                            srcDoc={htmlPreview}
+                            sandbox="allow-scripts"
+                            style={{ width: "100%", height: "100%", border: "none", background: "#fff" }}
+                        />
+                    ) : (
+                        <textarea
+                            className='output__textarea code-section'
+                            value={outputCode}
+                            readOnly
+                            placeholder={isRunning ? "Running..." : "Click Run or press Shift+Enter to see the output here..."}
+                        />
+                    )}
                 </div>
             </div>
         </div>
