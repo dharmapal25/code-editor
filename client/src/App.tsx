@@ -16,7 +16,7 @@ const App = () => {
         if (currentUser) {
           setUser(currentUser);
           const token = await currentUser.getIdToken();
-          // console.log("Firebase Token:", token);
+          console.log("Firebase Token:", token);
         } else {
           setUser(null);
         }
@@ -29,6 +29,7 @@ const App = () => {
 
     return () => unsubscribe();
   }, []);
+
 
   // 3. Agar Firebase abhi check kar raha hai, toh Loading screen dikhao
   if (loading) {
@@ -43,13 +44,8 @@ const App = () => {
 
   return (
     <>
-    <authUserInfo.Provider value={user}>
-      {user ? (
-        <h1>hello logged in</h1>
-      ) : (
-        <h1>hello logged out</h1>
-      )}
-      {/* <Navbar /> */}
+    <authUserInfo.Provider value={[user,setUser]}>
+      <Navbar />
       <JSEditor />
     </authUserInfo.Provider>
     </>
